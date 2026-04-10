@@ -9,7 +9,7 @@ npm i  vue-codemirror-lite -S
 main.js 按需引入 SchemaFormCodemirror 组件, 语言模式和主题
 
 ``` js
-import SchemaFormCodemirror from '@vueblocks/element-schema-form/lib/SchemaFormCodemirror.common.min.js'
+import SchemaFormCodemirror from '@mercerry/element-schema-form/lib/SchemaFormCodemirror.common.min.js'
 
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/night.css' // theme: night
@@ -33,7 +33,7 @@ npm i  vue2-editor -S
 main.js 按需引入 SchemaFormQuill 组件
 
 ``` js
-import SchemaFormQuill from '@vueblocks/element-schema-form/lib/SchemaFormQuill.common.min.js'
+import SchemaFormQuill from '@mercerry/element-schema-form/lib/SchemaFormQuill.common.min.js'
 
 Vue.use(SchemaFormQuill)
 ```

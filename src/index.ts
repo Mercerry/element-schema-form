@@ -1,3 +1,4 @@
+import type { App } from 'vue'
 import SchemaForm from './packages/SchemaForm.vue'
 import SchemaFormInput from './packages/components/SchemaFormInput.vue'
 import SchemaFormSelect from './packages/components/SchemaFormSelect.vue'
@@ -39,11 +40,11 @@ const components = [
   SchemaFormTimepicker
 ]
 
-function install (Vue, opts = {}) {
+function install (app: App, opts: Record<string, unknown> = {}) {
   components.forEach(component => {
-    Vue.component(component.name, component)
+    app.component(component.name as string, component)
   })
-  Vue.prototype.$globalParams = opts
+  app.config.globalProperties.$globalParams = opts
 }
 
 export default install
@@ -53,11 +54,4 @@ export {
   SchemaFormItem,
   FormMixin,
   LayoutMixin
-}
-
-if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(install)
-  if (install.installed) {
-    install.installed = false
-  }
 }

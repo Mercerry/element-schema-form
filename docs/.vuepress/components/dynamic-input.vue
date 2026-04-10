@@ -8,38 +8,33 @@
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      model: {
-        name: '',
-        editable: true
+<script setup>
+import { computed, reactive } from 'vue'
+
+const model = reactive({
+  name: '',
+  editable: true
+})
+
+const schema = computed(() => {
+  return [
+    [
+      {
+        type: 'switch',
+        prop: 'editable',
+        formItem: { label: '可编辑' }
       }
-    }
-  },
-  computed: {
-    schema () {
-      return [
-        [
-          {
-            type: 'switch',
-            prop: 'editable',
-            formItem: { label: '可编辑' }
-          }
-        ],
-        [
-          {
-            type: 'input',
-            prop: 'name',
-            formItem: { label: '姓名' },
-            dynamicAttrs: { disabled: !this.model.editable }
-          }
-        ]
-      ]
-    }
-  }
-}
+    ],
+    [
+      {
+        type: 'input',
+        prop: 'name',
+        formItem: { label: '姓名' },
+        dynamicAttrs: { disabled: !model.editable }
+      }
+    ]
+  ]
+})
 </script>
 
 <style scoped>

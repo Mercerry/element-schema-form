@@ -10,5 +10,4 @@ features:
   details: 基于 Element UI 组件库的 Form 表单
 - title: Responsive Form
   details: 灵活的响应式的栅格表单布局
-footer: MIT Licensed | Copyright © 2019-present VueBlocks
 ---

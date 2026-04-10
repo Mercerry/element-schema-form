@@ -1,24 +1,29 @@
 <template>
-  <vue-editor
-    v-model="bindVal"
-    v-bind="attrsAll"
-    v-on="onEvents"
-  />
+  <div class="schema-form-quill-placeholder">
+    <span>Quill Editor (not available in this build)</span>
+  </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useFormField } from '../../composables/use-form-field'
+import type { FormProps, FormValue } from '../../composables/use-form-field'
 
-import { VueEditor } from 'vue2-editor'
+const props = withDefaults(defineProps<FormProps>(), {
+  options: () => [],
+  onEvents: () => ({})
+})
 
-import FormMixin from '../../mixins/form-mixin'
+const emit = defineEmits<{
+  (event: 'update:value', value: FormValue): void
+  (event: 'change', payload: { prop?: string; value: unknown }): void
+}>()
 
-export default {
+defineOptions({
   name: 'SchemaFormQuill',
-  mixins: [FormMixin],
-  components: {
-    VueEditor
-  }
-}
+  inheritAttrs: false
+})
+
+useFormField('quill', props, emit)
 </script>
 
 <style lang="less" scoped>

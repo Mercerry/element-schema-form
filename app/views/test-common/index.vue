@@ -1,14 +1,14 @@
 <template>
   <div class="page-form">
-    <el-form :model="model" label-width="80px">
+    <el-form :model="formModel" label-width="80px">
       <schema-form
-        :model="model"
+        :model="formModel"
         :schema="formSchema"
-        :options="options"
+        :options="formOptions"
       >
-        <div slot="inputName">
-          <i class="el-icon-success"></i>
-        </div>
+        <template #inputName>
+          <el-icon><CircleCheckFilled /></el-icon>
+        </template>
       </schema-form>
     </el-form>
     <div class="page-footer">
@@ -17,42 +17,41 @@
   </div>
 </template>
 
-<script>
-import { model, schema, options } from './const.js'
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import { CircleCheckFilled } from '@element-plus/icons-vue'
+import { model, schema, options } from './const'
 
-export default {
-  name: 'TestPage',
-  data () {
-    return {
-      model,
-      options,
-      schema
-    }
-  },
-  computed: {
-    formSchema () {
-      return this.schema.map(list => {
-        return list.map(item => {
-          if (item.prop === 'phone') return { ...item, on: { blur: this.onSelectBlur } }
-          return item
-        })
-      })
-    }
-  },
-  methods: {
-    onSelectBlur (val) {
-      console.log('val: ', val)
-    },
-    handleAddRow () {
-      this.schema.push([{
-        type: 'input',
-        prop: 'phone',
-        formItem: { label: '联系电话' },
-        colGrid: { span: 8 }
-      }])
-    }
-  }
+const formModel = ref(model)
+const formOptions = ref(options)
+const schemaRef = ref(schema)
+
+const formSchema = computed(() => {
+  return schemaRef.value.map(list => {
+    return list.map((item: Record<string, unknown>) => {
+      if (item.prop === 'phone') return { ...item, on: { blur: onSelectBlur } }
+      return item
+    })
+  })
+})
+
+function onSelectBlur (val: unknown) {
+  console.log('val: ', val)
 }
+
+function handleAddRow () {
+  schemaRef.value.push([{
+    type: 'input',
+    prop: 'phone',
+    formItem: { label: '联系电话' },
+    colGrid: { span: 8 },
+    labelTooltip: '请输入联系电话'
+  }])
+}
+
+defineOptions({
+  name: 'TestPage'
+})
 </script>
 
 <style lang="less" scoped>

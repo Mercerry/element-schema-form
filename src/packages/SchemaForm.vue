@@ -12,16 +12,17 @@
           <template v-else>
             <!-- 具体组件的配置项目 -->
             <schema-form-item
-              v-bind="col.formItem"
-              :prop="col.prop"
-              :col="col"
-              :model="model"
-              :options="options"
-              v-on="$listeners"
+              v-bind="{ ...col.formItem, prop: col.prop, col, model, options, ...$attrs }"
             >
-              <slot v-if="col.labelSlot" :name="col.labelSlot" :slot="col.labelSlot"></slot>
-              <slot v-if="col.frontSlot" :name="col.frontSlot" :slot="col.frontSlot"></slot>
-              <slot v-if="col.rearSlot" :name="col.rearSlot" :slot="col.rearSlot"></slot>
+              <template v-if="col.labelSlot" #[col.labelSlot]>
+                <slot :name="col.labelSlot"></slot>
+              </template>
+              <template v-if="col.frontSlot" #[col.frontSlot]>
+                <slot :name="col.frontSlot"></slot>
+              </template>
+              <template v-if="col.rearSlot" #[col.rearSlot]>
+                <slot :name="col.rearSlot"></slot>
+              </template>
             </schema-form-item>
           </template>
         </el-col>
@@ -30,20 +31,42 @@
   </div>
 </template>
 
-<script>
-import LayoutMixin from './mixins/layout-mixin'
+<script setup lang="ts">
+import { computed } from 'vue'
+import cloneDeep from 'lodash.clonedeep'
 import SchemaFormItem from './SchemaFormItem.vue'
 
-export default {
-  name: 'SchemaForm',
-  mixins: [LayoutMixin],
-  components: {
-    SchemaFormItem
-  },
-  mounted () {
-    // console.log(this.$slots)
-  }
+interface ColItem {
+  hide?: boolean
+  colGrid?: { span: number }
+  [key: string]: unknown
 }
+
+const props = withDefaults(defineProps<{
+  layout?: Record<string, unknown>
+  schema: ColItem[][]
+  model: Record<string, unknown>
+  options?: Record<string, unknown>
+}>(), {
+  layout: () => ({}),
+  options: () => ({})
+})
+
+defineOptions({
+  name: 'SchemaForm',
+  inheritAttrs: false
+})
+
+const formatedSchema = computed<ColItem[][]>(() => {
+  const schema: ColItem[][] = cloneDeep(props.schema || [])
+  schema.forEach((list: ColItem[]) => {
+    const showNum = list.filter((item: ColItem) => !item.hide).length || 1
+    list.forEach((obj: ColItem) => {
+      obj.colGrid = obj.colGrid || { span: Math.round(24 / showNum) }
+    })
+  })
+  return schema
+})
 </script>
 
 <style lang="less">

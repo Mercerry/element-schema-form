@@ -4,34 +4,32 @@
       :model="model"
       :schema="schema"
     >
-      <div slot="name" class="text-area">
-        <span class="text-area__num">{{model.name.length}}</span>字
-      </div>
+      <template #name>
+        <div class="text-area">
+          <span class="text-area__num">{{ model.name.length }}</span>字
+        </div>
+      </template>
     </schema-form>
   </el-form>
 </template>
 
-<script>
+<script setup>
+import { reactive } from 'vue'
 
-export default {
-  data () {
-    return {
-      model: {
-        name: ''
-      },
-      schema: [
-        [
-          {
-            type: 'input',
-            prop: 'name',
-            formItem: { label: '姓名' },
-            rearSlot: 'name'
-          }
-        ]
-      ]
+const model = reactive({
+  name: ''
+})
+
+const schema = [
+  [
+    {
+      type: 'input',
+      prop: 'name',
+      formItem: { label: '姓名' },
+      rearSlot: 'name'
     }
-  }
-}
+  ]
+]
 </script>
 
 <style scoped>

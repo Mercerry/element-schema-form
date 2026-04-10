@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="hover" class="code-contain">
     <section class="display-area">
-      <component :is="compName"></component>
+      <component :is="currentComponent"></component>
     </section>
     <main v-if="visible" class="code-area">
       <slot></slot>
@@ -13,7 +13,8 @@
   </el-card>
 </template>
 
-<script>
+<script setup>
+import { computed, ref } from 'vue'
 
 // 在线示例
 import BasicValidate from './basic-validate'
@@ -39,38 +40,38 @@ import ExpandCodeMirror from './expand-code-mirror'
 // 拓展属性
 import AttrsSelectSide from './attrs/select-side.vue'
 
-export default {
-  props: {
-    compName: String,
-    link: {
-      type: String,
-      default: '#'
-    }
-  },
-  components: {
-    BasicValidate,
-    ValidateNumber,
-    AddItem,
-    LayoutGutter,
-    LayoutOffset,
-    LayoutFlexible,
-    SlotFront,
-    SlotRear,
-    SlotSlot,
-    CustomInput,
-    DynamicInput,
-    ExpandCodeMirror,
-    SlotTool,
-    SlotTooltip,
-    SlotLabel,
-    AttrsSelectSide
-  },
-  data () {
-    return {
-      visible: false
-    }
+const props = defineProps({
+  compName: String,
+  link: {
+    type: String,
+    default: '#'
   }
+})
+
+const visible = ref(false)
+
+const componentMap = {
+  BasicValidate,
+  ValidateNumber,
+  AddItem,
+  LayoutGutter,
+  LayoutOffset,
+  LayoutFlexible,
+  SlotFront,
+  SlotRear,
+  SlotSlot,
+  CustomInput,
+  DynamicInput,
+  ExpandCodeMirror,
+  SlotTool,
+  SlotTooltip,
+  SlotLabel,
+  AttrsSelectSide
 }
+
+const currentComponent = computed(() => {
+  return componentMap[props.compName] || null
+})
 </script>
 
 <style>

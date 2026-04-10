@@ -4,7 +4,7 @@ export const model = {
   phone: '',
   sex: 'male',
   expire: '',
-  location: [],
+  location: [] as string[],
   isOn: false,
   city: ['beijing'],
   sliderVal: 60,
@@ -14,6 +14,7 @@ export const model = {
   label: ['小清新'],
   percent: 20
 }
+
 export const schema = [
   [
     {
@@ -54,7 +55,8 @@ export const schema = [
     }
   ],
   [
-    { type: 'cascader',
+    {
+      type: 'cascader',
       prop: 'location',
       formItem: { label: '地域' },
       attrs: { 'show-all-levels': false }
@@ -79,9 +81,7 @@ export const schema = [
       prop: 'sleepTime',
       formItem: { label: '晚睡时间' },
       attrs: {
-        'picker-options': {
-          selectableRange: '18:30:00 - 20:30:00'
-        },
+        'is-range': false,
         'arrow-control': true
       }
     }, {
@@ -99,7 +99,7 @@ export const schema = [
       type: 'tags',
       prop: 'label',
       formItem: { label: '标签' },
-      attrs: { size: 'medium', buttonSize: 'mini', 'show-add': true }
+      attrs: { size: 'default', buttonSize: 'small', 'show-add': true }
     }, {
       type: 'progress',
       prop: 'percent',
@@ -107,6 +107,7 @@ export const schema = [
     }
   ]
 ]
+
 export const options = {
   phone: [{ label: '1881031****', value: '1881031****' }, { label: '1861031****', value: '1861031****' }],
   sex: [{ label: '男', value: 'male' }, { label: '女', value: 'female' }],

@@ -1,22 +1,21 @@
 <template>
   <el-form-item :prop="col.prop" v-bind="col.formItem" class="schema-form-item">
-    <template slot="label" v-if="col.labelSlot">
+    <template #label v-if="col.labelSlot">
       <slot :name="col.labelSlot"></slot>
     </template>
-    <template slot="label" v-if="col.labelTooltip">
+    <template #label v-else-if="col.labelTooltip">
       <span class="schema-label">{{ labelContent }}</span>
       <el-tooltip :content="col.labelTooltip">
-        <i class="el-icon-warning"></i>
+        <el-icon><Warning /></el-icon>
       </el-tooltip>
     </template>
     <span v-if="col.frontHtml" v-html="col.frontHtml" />
     <slot :name="col.frontSlot" v-if="col.frontSlot"></slot>
     <component
-      v-bind="col.attrs"
-      v-on="$listeners"
+      v-bind="{ ...col.attrs, ...$attrs }"
       :is="getComponentName(col.type)"
       :prop="col.prop"
-      :value.sync="model[col.prop]"
+      v-model:value="model[col.prop]"
       :modifier="col.modifier"
       :dynamicAttrs="col.dynamicAttrs"
       :onEvents="col.on"
@@ -28,44 +27,55 @@
   </el-form-item>
 </template>
 
-<script>
-export default {
-  props: {
-    model: { // 绑定的value值
-      type: Object
-    },
-    options: { // 多选值绑定的陪选项目
-      type: Object
-    },
-    col: {
-      type: Object
-    }
-  },
-  data () {
-    return {
-      builtInNames: ['input', 'select', 'radio', 'datepicker',
-        'cascader', 'placeholder', 'checkbox', 'slider', 'timeselect', 'timepicker', 'jsoneditor', 'quill', 'codemirror',
-        'rate', 'switch', 'colorpicker', 'tags', 'progress']
-    }
-  },
-  computed: {
-    labelContent () {
-      let _formItem = this.col.formItem || {}
-      return _formItem.label || ''
-    }
-  },
-  methods: {
-    // 组件名称
-    getComponentName (type) {
-      if (this.builtInNames.includes(type)) {
-        // 内置组件
-        return 'schema-form-' + type
-      } else {
-        // 外部组件
-        return type
-      }
-    }
+<script setup lang="ts">
+import { computed } from 'vue'
+import { Warning } from '@element-plus/icons-vue'
+
+interface SchemaCol {
+  prop?: string
+  formItem?: Record<string, unknown>
+  type?: string
+  modifier?: string
+  dynamicAttrs?: Record<string, unknown>
+  on?: Record<string, (...args: unknown[]) => unknown>
+  attrs?: Record<string, unknown>
+  labelSlot?: string
+  labelTooltip?: string
+  frontHtml?: string
+  frontSlot?: string
+  rearHtml?: string
+  rearSlot?: string
+}
+
+const props = withDefaults(defineProps<{
+  model?: Record<string, unknown>
+  options?: Record<string, unknown>
+  col?: SchemaCol
+}>(), {
+  model: () => ({}),
+  options: () => ({}),
+  col: () => ({})
+})
+
+defineOptions({
+  name: 'SchemaFormItem',
+  inheritAttrs: false
+})
+
+const builtInNames = ['input', 'select', 'radio', 'datepicker',
+  'cascader', 'placeholder', 'checkbox', 'slider', 'timeselect', 'timepicker', 'jsoneditor', 'quill', 'codemirror',
+  'rate', 'switch', 'colorpicker', 'tags', 'progress']
+
+const labelContent = computed<string>(() => {
+  const formItem = (props.col as Record<string, Record<string, string>>)?.formItem || {}
+  return formItem.label || ''
+})
+
+function getComponentName (type = ''): string {
+  if (builtInNames.includes(type)) {
+    return 'schema-form-' + type
   }
+  return type
 }
 </script>
 

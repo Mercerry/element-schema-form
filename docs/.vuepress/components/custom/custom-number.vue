@@ -7,14 +7,25 @@
   ></el-input-number>
 </template>
 
-<script>
+<script setup lang="ts">
+import { useFormField } from '../../../../src/packages/composables/use-form-field'
+import type { FormProps, FormValue } from '../../../../src/packages/composables/use-form-field'
 
-import { FormMixin } from '../../../../src/index'
+const props = withDefaults(defineProps<FormProps>(), {
+  options: () => [],
+  onEvents: () => ({})
+})
 
-export default {
+const emit = defineEmits<{
+  (event: 'update:value', value: FormValue): void
+}>()
+
+defineOptions({
   name: 'CustomNumber',
-  mixins: [FormMixin]
-}
+  inheritAttrs: false
+})
+
+const { bindVal, attrsAll, onEvents } = useFormField('customnumber', props, emit)
 
 </script>
 

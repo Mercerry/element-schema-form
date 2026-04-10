@@ -5,34 +5,26 @@
       :layout="layout"
       :schema="schema"
     >
-      <div 
-        class="grid-content"
-        v-for="idx in 4" 
-        :key="idx" 
-        :slot="`col_${idx}`" 
-      ></div>
+      <template v-for="idx in 4" :key="idx" #[`col_${idx}`]>
+        <div class="grid-content"></div>
+      </template>
     </schema-form>
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      layout: {
-        gutter:20
-      },
-      schema: [
-        [ 
-          {slot: 'col_1'},
-          {slot: 'col_2'},
-          {slot: 'col_3'},
-          {slot: 'col_4'} 
-        ]
-      ]
-    }
-  }
+<script setup>
+const layout = {
+  gutter: 20
 }
+
+const schema = [
+  [
+    { slot: 'col_1' },
+    { slot: 'col_2' },
+    { slot: 'col_3' },
+    { slot: 'col_4' }
+  ]
+]
 </script>
 
 <style  scoped>

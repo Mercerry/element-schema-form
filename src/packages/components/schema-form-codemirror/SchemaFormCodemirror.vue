@@ -1,26 +1,29 @@
 <template>
-  <codemirror
-    v-model="bindVal"
-    v-on="onEvents"
-    :options="cmOptions"
-    ref="myCm"
-  />
-
+  <div class="schema-form-codemirror-placeholder">
+    <span>CodeMirror Editor (not available in this build)</span>
+  </div>
 </template>
 
-<script>
-import { codemirror } from 'vue-codemirror-lite'
+<script setup lang="ts">
+import { useFormField } from '../../composables/use-form-field'
+import type { FormProps, FormValue } from '../../composables/use-form-field'
 
-import FormMixin from '../../mixins/form-mixin'
-import FormCodeMirrorMixin from '../../mixins/form-code-mirror-mixin'
+const props = withDefaults(defineProps<FormProps>(), {
+  options: () => [],
+  onEvents: () => ({})
+})
 
-export default {
+const emit = defineEmits<{
+  (event: 'update:value', value: FormValue): void
+  (event: 'change', payload: { prop?: string; value: unknown }): void
+}>()
+
+defineOptions({
   name: 'SchemaFormCodemirror',
-  mixins: [FormMixin, FormCodeMirrorMixin],
-  components: {
-    codemirror
-  }
-}
+  inheritAttrs: false
+})
+
+useFormField('codemirror', props, emit)
 </script>
 
 <style lang="less" scoped>

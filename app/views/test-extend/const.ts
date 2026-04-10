@@ -7,6 +7,7 @@ export const model = {
   quill: '<h4>一段文字</h4>',
   code: 'let a = 100'
 }
+
 export const schema = [
   [
     {
@@ -21,12 +22,7 @@ export const schema = [
     {
       type: 'quill',
       prop: 'quill',
-      formItem: { label: '富文本编辑' },
-      attrs: { 'editor-toolbar': [
-        ['bold', 'italic', 'underline'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['code-block']]
-      }
+      formItem: { label: '富文本编辑' }
     }
   ],
   [
@@ -37,4 +33,5 @@ export const schema = [
     }
   ]
 ]
+
 export const options = {}

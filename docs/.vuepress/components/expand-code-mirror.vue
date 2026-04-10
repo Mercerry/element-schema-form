@@ -8,40 +8,36 @@
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      model: { code: 'let a = 100' },
-      schema: [
-        [
-          {
-            type: 'codemirror',
-            prop: 'code',
-            formItem: { label: '代码镜像' },
-            attrs: {
-              cmOptions: {
-                tabSize: 2,
-                mode: 'text/javascript',
-                theme: 'night',
-                lineNumbers: true,
-                line: true
-              }
-            },
-            on: {
-              change: this.codeChange
-            }
-          }
-        ]
-      ]
-    }
-  },
-  methods: {
-    codeChange (code) {
-      console.log(code)
-    }
-  }
+<script setup>
+import { reactive } from 'vue'
+
+const model = reactive({ code: 'let a = 100' })
+
+function codeChange (code) {
+  console.log(code)
 }
+
+const schema = [
+  [
+    {
+      type: 'codemirror',
+      prop: 'code',
+      formItem: { label: '代码镜像' },
+      attrs: {
+        cmOptions: {
+          tabSize: 2,
+          mode: 'text/javascript',
+          theme: 'night',
+          lineNumbers: true,
+          line: true
+        }
+      },
+      on: {
+        change: codeChange
+      }
+    }
+  ]
+]
 </script>
 
 <style scoped>

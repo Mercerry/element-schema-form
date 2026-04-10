@@ -15,7 +15,7 @@ SchemaForm 组件提供了便于创建自定义组件的方案，使用 `FormMix
 </template>
 
 <script>
-import { FormMixin } from '@vueblocks/element-schema-form'
+import { FormMixin } from '@mercerry/element-schema-form'
 export default {
   name: 'CustomNumber',
   mixins: [FormMixin]
@@ -28,7 +28,7 @@ export default {
 ``` js
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import SchemaForm from '@vueblocks/element-schema-form'
+import SchemaForm from '@mercerry/element-schema-form'
 import CustomNumber from '@/components/CustomNumber.vue'
 
 Vue.use(ElementUI)

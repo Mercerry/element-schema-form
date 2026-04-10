@@ -4,26 +4,25 @@
       :model="model"
       :schema="schema"
     >
-      <el-form-item label="活动名称" slot="name">
-        <el-input v-model="model.name"></el-input>
-      </el-form-item>
+      <template #name>
+        <el-form-item label="活动名称">
+          <el-input v-model="model.name"></el-input>
+        </el-form-item>
+      </template>
     </schema-form>
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      model: {
-        name: ''
-      },
-      schema: [
-        [{ slot: 'name' }]
-      ]
-    }
-  }
-}
+<script setup>
+import { reactive } from 'vue'
+
+const model = reactive({
+  name: ''
+})
+
+const schema = [
+  [{ slot: 'name' }]
+]
 </script>
 
 <style scoped>

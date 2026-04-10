@@ -4,35 +4,32 @@
       :model="model"
       :schema="schema"
     >
-      <span slot="ageName">
-        标签插槽
-      </span>
+      <template #ageName>
+        <span>标签插槽</span>
+      </template>
     </schema-form>
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      model: {
-        name: ''
-      },
-      schema: [
-        [
-          {
-            type: 'input',
-            prop: 'name',
-            frontHtml: '近',
-            labelSlot: 'ageName',
-            formItem: { },
-            rearHtml: '天'
-          }
-        ]
-      ]
+<script setup>
+import { reactive } from 'vue'
+
+const model = reactive({
+  name: ''
+})
+
+const schema = [
+  [
+    {
+      type: 'input',
+      prop: 'name',
+      frontHtml: '近',
+      labelSlot: 'ageName',
+      formItem: {},
+      rearHtml: '天'
     }
-  }
-}
+  ]
+]
 </script>
 
 <style >

@@ -9,13 +9,26 @@
   </el-cascader>
 </template>
 
-<script>
-import FormMixin from '../mixins/form-mixin'
+<script setup lang="ts">
+import { useFormField } from '../composables/use-form-field'
+import type { FormProps, FormValue } from '../composables/use-form-field'
 
-export default {
+const props = withDefaults(defineProps<FormProps>(), {
+  options: () => [],
+  onEvents: () => ({})
+})
+
+const emit = defineEmits<{
+  (event: 'update:value', value: FormValue): void
+  (event: 'change', payload: { prop?: string; value: unknown }): void
+}>()
+
+defineOptions({
   name: 'SchemaFormCascader',
-  mixins: [FormMixin]
-}
+  inheritAttrs: false
+})
+
+const { bindVal, attrsAll, onEvents, options } = useFormField('cascader', props, emit)
 </script>
 
 <style lang="less" scoped>

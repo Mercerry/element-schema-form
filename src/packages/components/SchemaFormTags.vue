@@ -19,7 +19,7 @@
       v-model="inputValue"
       ref="saveTagInput"
       size="small"
-      @keyup.enter.native="handleInputConfirm"
+      @keyup.enter="handleInputConfirm"
       @blur="handleInputConfirm"
     >
     </el-input>
@@ -33,40 +33,77 @@
   </div>
 </template>
 
-<script>
-import FormMixin from '../mixins/form-mixin'
-import FormTagsMixin from '../mixins/form-tags-mixin'
+<script setup lang="ts">
+import { computed, nextTick, ref } from 'vue'
+import { useFormField } from '../composables/use-form-field'
+import type { FormProps, FormValue } from '../composables/use-form-field'
 
-export default {
+type TagInputRef = {
+  focus?: () => void
+}
+
+const props = withDefaults(defineProps<FormProps>(), {
+  options: () => [],
+  onEvents: () => ({})
+})
+
+const emit = defineEmits<{
+  (event: 'update:value', value: FormValue): void
+  (event: 'change', payload: { prop?: string; value: string[] }): void
+}>()
+
+defineOptions({
   name: 'SchemaFormTags',
-  mixins: [FormMixin, FormTagsMixin],
-  data () {
-    return {
-      inputVisible: false,
-      inputValue: ''
-    }
-  },
-  methods: {
-    handleClose (tag) {
-      this.bindVal.splice(this.bindVal.indexOf(tag), 1)
-      this.$emit('change', { prop: this.prop, value: this.bindVal })
-    },
-    showInput () {
-      this.inputVisible = true
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
-      })
-    },
-    handleInputConfirm () {
-      let inputValue = this.inputValue
-      if (inputValue) {
-        this.bindVal.push(inputValue)
-      }
-      this.inputVisible = false
-      this.inputValue = ''
-      this.$emit('change', { prop: this.prop, value: this.bindVal })
-    }
-  }
+  inheritAttrs: false
+})
+
+const { bindVal, attrsAll } = useFormField('tags', props, emit)
+
+const inputVisible = ref(false)
+const inputValue = ref('')
+const saveTagInput = ref<TagInputRef | null>(null)
+
+const showAdd = computed<boolean>(() => {
+  return attrsAll.value['show-add'] ? Boolean(attrsAll.value['show-add']) : false
+})
+const closable = computed<boolean>(() => {
+  return Object.prototype.hasOwnProperty.call(attrsAll.value, 'closable')
+    ? Boolean(attrsAll.value.closable)
+    : true
+})
+const type = computed<string>(() => attrsAll.value.type ? String(attrsAll.value.type) : '')
+const hit = computed<boolean>(() => attrsAll.value.hit ? Boolean(attrsAll.value.hit) : false)
+const size = computed<string>(() => attrsAll.value.size ? String(attrsAll.value.size) : '')
+const effect = computed<string>(() => attrsAll.value.effect ? String(attrsAll.value.effect) : 'light')
+const color = computed<string>(() => attrsAll.value.color ? String(attrsAll.value.color) : '')
+const buttonSize = computed<string>(() => attrsAll.value['button-size'] ? String(attrsAll.value['button-size']) : 'small')
+const buttonWords = computed<string>(() => attrsAll.value['button-words'] ? String(attrsAll.value['button-words']) : '+ New Tag')
+const buttonType = computed<string>(() => attrsAll.value['button-type'] ? String(attrsAll.value['button-type']) : '')
+
+function currentTags (): string[] {
+  return Array.isArray(bindVal.value) ? [...(bindVal.value as string[])] : []
+}
+
+function handleClose (tag: string) {
+  const tags = currentTags().filter(item => item !== tag)
+  bindVal.value = tags
+  emit('change', { prop: props.prop, value: tags })
+}
+
+function showInput () {
+  inputVisible.value = true
+  nextTick(() => {
+    saveTagInput.value?.focus?.()
+  })
+}
+
+function handleInputConfirm () {
+  const tags = currentTags()
+  if (inputValue.value) tags.push(inputValue.value)
+  inputVisible.value = false
+  inputValue.value = ''
+  bindVal.value = tags
+  emit('change', { prop: props.prop, value: tags })
 }
 </script>
 

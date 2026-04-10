@@ -9,35 +9,33 @@
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      model: {
-        age: ''
+<script setup>
+import { reactive } from 'vue'
+
+const model = reactive({
+  age: ''
+})
+
+const schema = [
+  [
+    {
+      type: 'select',
+      prop: 'age',
+      attrs: {
+        optionSides: ['label', 'desc'],
+        popperClass: 'attr-side'
       },
-      schema: [
-        [
-          {
-            type: 'select',
-            prop: 'age',
-            attrs: {
-              optionSides: ['label', 'desc'],
-              popperClass: 'attr-side'
-            },
-            formItem: { label: '年龄' }
-          }
-        ]
-      ],
-      options: {
-        age: [
-          { label: '18', value: 18, desc: '描述A' },
-          { label: '19', value: 19, desc: '描述B' },
-          { label: '20', value: 20, desc: '描述C' }
-        ]
-      }
+      formItem: { label: '年龄' }
     }
-  }
+  ]
+]
+
+const options = {
+  age: [
+    { label: '18', value: 18, desc: '描述A' },
+    { label: '19', value: 19, desc: '描述B' },
+    { label: '20', value: 20, desc: '描述C' }
+  ]
 }
 </script>
 

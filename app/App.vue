@@ -20,23 +20,19 @@
 </el-container>
 </template>
 
-<script>
-export default {
-  name: 'APP',
-  data () {
-    return {
-      activeIndex: '1',
-      headerBg: '#10163a',
-      headerTextColor: '#ffffff',
-      headerActiveTextColor: '#FF9F43'
-    }
-  },
-  methods: {
-    handleSelect () {
+<script setup lang="ts">
+import { ref } from 'vue'
 
-    }
-  }
-}
+const activeIndex = ref('1')
+const headerBg = '#10163a'
+const headerTextColor = '#ffffff'
+const headerActiveTextColor = '#FF9F43'
+
+function handleSelect () {}
+
+defineOptions({
+  name: 'APP'
+})
 </script>
 
 <style lang="less">

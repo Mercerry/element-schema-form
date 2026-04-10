@@ -8,27 +8,24 @@
   </el-form>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      model: {
-        name: ''
-      },
-      schema: [
-        [
-          {
-            type: 'input',
-            prop: 'name',
-            frontHtml: '近',
-            formItem: { label: '店铺年龄' },
-            rearHtml: '天'
-          }
-        ]
-      ]
+<script setup>
+import { reactive } from 'vue'
+
+const model = reactive({
+  name: ''
+})
+
+const schema = [
+  [
+    {
+      type: 'input',
+      prop: 'name',
+      frontHtml: '近',
+      formItem: { label: '店铺年龄' },
+      rearHtml: '天'
     }
-  }
-}
+  ]
+]
 </script>
 
 <style >
